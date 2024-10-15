@@ -59,7 +59,7 @@ class TaskController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|max:255|unique:tasks',
             'password' => 'required|string|min:6',
             'mobile' => 'required|numeric|min:10',
             'role' => 'required|string',
@@ -78,6 +78,14 @@ class TaskController extends Controller
             $imagePath = 'images/' . $imageName;
         }
         $details = Session::get('details', []);
+
+
+        foreach ($details as $detail) {
+            if ($request['email'] == $detail['email']); {
+                return redirect()->back()->with('error', 'Email already used');
+            }
+        }
+
 
         // Add new data
         $details[] = [
@@ -108,7 +116,7 @@ class TaskController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|max:255|unique:tasks',
             'password' => 'required|string|min:6',
             'mobile' => 'required|numeric|min:10',
             'role' => 'required|string',
@@ -132,6 +140,8 @@ class TaskController extends Controller
         $details[$index]['role'] = $request->role;
         $details[$index]['date'] = $request->date;
         $details[$index]['password'] = $request->password;
+
+
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');

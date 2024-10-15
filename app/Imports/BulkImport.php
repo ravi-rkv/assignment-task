@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Task;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class BulkImport implements ToModel, WithHeadingRow
@@ -17,14 +18,14 @@ class BulkImport implements ToModel, WithHeadingRow
      */
     public function model(array $row)
     {
+
         return new Task([
             'name' => $row['name'],
             'email' => $row['email'],
             'password' => Hash::make($row['password']),
             'mobile' => $row['mobile'],
             'role' => $row['role'],
-            'date' => Carbon::createFromFormat('d-m-Y', $row['date'], 'UTC')
-                ->setTimezone('Asia/Kolkata')->format('Y-m-d'),
+            'date' => Date::excelToDateTimeObject($row['date'])->format('Y-m-d'),
         ]);
     }
 }
