@@ -56,7 +56,7 @@
                                                     <div class="form-group">
                                                         <label for="">File data <span><small class="text-danger"><a href="{{ asset('bulkFile.csv') }}">Download sample file</a></small></span></label>
                                                         <input type="file" name="file" id="" class="form-control" required>
-                                                        <span><small class="text-danger">Only CSV file supported</small></span>
+                                                        <span><small class="text-danger">Only CSV & XLSX file supported</small></span>
                                                     </div>
                                                 </div>
                                                 <hr>

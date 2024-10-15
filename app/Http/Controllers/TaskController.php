@@ -43,7 +43,7 @@ class TaskController extends Controller
 
     public function downloadAllData()
     {
-        return Excel::download(new BulkExport, 'data.csv');
+        return Excel::download(new BulkExport, 'data.xlsx');
     }
 
     public function addSingleDataView()
@@ -80,8 +80,8 @@ class TaskController extends Controller
         $details = Session::get('details', []);
 
 
-        foreach ($details as $detail) {
-            if ($request['email'] == $detail['email']); {
+        foreach ($details as $key => $val) {
+            if ($request['email'] === $val['email']) {
                 return redirect()->back()->with('error', 'Email already used');
             }
         }
@@ -134,6 +134,13 @@ class TaskController extends Controller
         if (!isset($details[$index])) {
             return redirect()->route('addSingle')->with('error', 'Detail not found.');
         }
+
+        foreach ($details as $key => $val) {
+            if (($request['email'] === $val['email']) && ($key != $index)) {
+                return redirect()->back()->with('error', 'Data with same email exist in session data');
+            }
+        }
+
         $details[$index]['name'] = $request->name;
         $details[$index]['email'] = $request->email;
         $details[$index]['mobile'] = $request->mobile;
